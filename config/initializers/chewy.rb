@@ -5,6 +5,9 @@ user            = ENV.fetch('ES_USER') { nil }
 password        = ENV.fetch('ES_PASS') { nil }
 fallback_prefix = ENV.fetch('REDIS_NAMESPACE') { nil }
 prefix          = ENV.fetch('ES_PREFIX') { fallback_prefix }
+scheme  	= ENV.fetch('ES_SCHEME') { http }
+cacert		= ENV.fetch('ES_CACERT') { nil }
+apikey		= ENV.fetch('ES_APIKEY') { nil }
 
 Chewy.settings = {
   host: "#{host}:#{port}",
@@ -14,6 +17,12 @@ Chewy.settings = {
   user: user,
   password: password,
   sidekiq: { queue: 'pull' },
+  scheme: scheme,
+  transport_options: {
+    ssl: {
+      ca_file: cacert
+    }
+  }
 }
 
 # We use our own async strategy even outside the request-response
